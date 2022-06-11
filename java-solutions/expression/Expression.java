@@ -59,7 +59,7 @@ public interface Expression extends ToMiniString {
                 .basic("x", "x", x -> x, vx)
                 .basic("(x + 2)", "x + 2", x -> x + 2, new Add(vx, c(2)))
                 .basic("(2 - x)", "2 - x", x -> 2 - x, new Subtract(c(2), vx))
-                .basic("(3 * x)", "3 * x", x -> 3*x, new Multiply(c(3), vx))
+                .basic("(3 * x)", "3 * x", x -> 3 * x, new Multiply(c(3), vx))
                 .basic("(x + x)", "x + x", x -> x + x, new Add(vx, vx))
                 .basic("(x / -2)", "x / -2", x -> -x / 2, new Divide(vx, c(-2)))
                 .basic("(x + x)", "x + x", x -> x + x, new Add(vx, vx))

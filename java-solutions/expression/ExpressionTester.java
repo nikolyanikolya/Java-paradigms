@@ -45,9 +45,9 @@ public class ExpressionTester<E extends ToMiniString, C> extends Tester {
         this.kind = kind;
 
         generator = new Generator(expectedConstant, kind::constant, binary, kind::randomValue);
-        generator.binary("+",  1600, add, Add.class);
+        generator.binary("+", 1600, add, Add.class);
         generator.binary("-", 1602, sub, Subtract.class);
-        generator.binary("*",  2001, mul, Multiply.class);
+        generator.binary("*", 2001, mul, Multiply.class);
         generator.binary("/", 2002, div, Divide.class);
     }
 

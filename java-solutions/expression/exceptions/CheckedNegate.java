@@ -1,12 +1,14 @@
 package expression.exceptions;
+
 import expression.TemplateExpression;
 
 
-public class CheckedNegate extends expression.Negate  {
+public class CheckedNegate<T extends Number> extends expression.Negate<T> {
 
-    public CheckedNegate(TemplateExpression a) {
+    public CheckedNegate(TemplateExpression<T> a) {
         super(a);
     }
+
     @Override
     protected int calculate(int x) {
         return intCalculator.negate(x);

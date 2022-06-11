@@ -1,7 +1,7 @@
 package expression.exceptions;
 
-public class OverflowException extends RuntimeException {
-    public OverflowException(String message){
+public class OverflowException extends EvaluateException {
+    public OverflowException(String message) {
         super(message);
     }
 }

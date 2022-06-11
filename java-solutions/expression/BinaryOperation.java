@@ -5,17 +5,19 @@ import expression.calculator.IntegerCalculator;
 
 import java.util.Objects;
 
-public abstract class BinaryOperation extends Operation {
+public abstract class BinaryOperation<T extends Number> extends Operation<T> {
     protected final Calculator<Integer> intCalculator = new IntegerCalculator();
-    private final TemplateExpression a;
-    private final TemplateExpression b;
-    public BinaryOperation(TemplateExpression a, TemplateExpression b) {
+    private final TemplateExpression<T> a;
+    private final TemplateExpression<T> b;
+
+    public BinaryOperation(TemplateExpression<T> a, TemplateExpression<T> b) {
         this.a = a;
         this.b = b;
     }
 
     protected abstract int calculate(int x, int y);
 
+    protected abstract T calculate(T x, T y, Calculator<T> calculator);
 
     @Override
     public int evaluate(int value) {
@@ -28,10 +30,16 @@ public abstract class BinaryOperation extends Operation {
     }
 
     @Override
+    public T evaluate(T x, T y, T z, Calculator<T> calculator){
+        return calculate(a.evaluate(x, y, z, calculator), b.evaluate(x, y, z, calculator), calculator);
+    }
+
+    @Override
     public String toString() {
         return '(' + a.toString() + ' ' + getOperation() +
                 ' ' + b.toString() + ')';
     }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof BinaryOperation binaryOperation) {
@@ -42,7 +50,7 @@ public abstract class BinaryOperation extends Operation {
 
     @Override
     public int hashCode() {
-        return  Objects.hash(a, b, getClass());
+        return Objects.hash(a, b, getClass());
     }
 
 }

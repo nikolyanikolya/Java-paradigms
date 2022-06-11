@@ -1,14 +1,21 @@
 package expression;
 
 
-public class Subtract extends BinaryOperation {
-    public Subtract(TemplateExpression a, TemplateExpression b) {
+import expression.calculator.Calculator;
+
+public class Subtract<T extends Number> extends BinaryOperation<T> {
+    public Subtract(TemplateExpression<T> a, TemplateExpression<T> b) {
         super(a, b);
     }
 
     @Override
     protected int calculate(int x, int y) {
         return x - y;
+    }
+
+    @Override
+    protected T calculate(T x, T y, Calculator<T> calculator) {
+        return calculator.subtract(x, y);
     }
 
 

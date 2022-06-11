@@ -1,8 +1,10 @@
 package expression;
 
-public class UpperBitCount extends UnaryOperation{
+import expression.calculator.Calculator;
 
-    public UpperBitCount(TemplateExpression a) {
+public class UpperBitCount<T extends Number> extends UnaryOperation<T> {
+
+    public UpperBitCount(TemplateExpression<T> a) {
         super(a);
     }
 
@@ -16,17 +18,23 @@ public class UpperBitCount extends UnaryOperation{
         int digit = x;
         int cnt = 0;
         int parity = 0;
-        if (digit == 0){
+        if (digit == 0) {
             return 32;
         }
-        if(digit < 0){
+        if (digit < 0) {
             parity = 1;
             digit = -(digit + 1);
         }
-        while(digit % 2 == parity) {
+        while (digit % 2 == parity) {
             digit /= 2;
             cnt++;
         }
         return cnt;
     }
+
+    @Override
+    protected T calculate(T x, Calculator<T> calculator) {
+        return calculator.upperBit(x);
+    }
+
 }

@@ -1,23 +1,26 @@
 package expression.parser;
 
 import expression.Const;
-
+import expression.calculator.Calculator;
+import expression.calculator.IntegerCalculator;
 import expression.exceptions.MissingParenException;
 import expression.exceptions.ParserException;
 
-
 import static java.lang.Character.isWhitespace;
 
-public abstract class BaseParser {
+public abstract class BaseParser<T extends Number> {
     protected static final char END = '\0';
     private final ExpressionSource source;
+    private final Calculator<T> calculator;
     private char ch;
 
     protected char getChar() {
         return ch;
     }
-    protected BaseParser(final ExpressionSource source) {
+
+    protected BaseParser(final ExpressionSource source, Calculator<T> calculator) {
         this.source = source;
+        this.calculator = calculator;
         nextChar();
     }
 
@@ -32,11 +35,12 @@ public abstract class BaseParser {
         }
         return false;
     }
-    protected boolean test(final String expected){
+
+    protected boolean test(final String expected) {
         char ch0 = ch;
         int pos0 = source.getPos();
-        for (int i = 0; i < expected.length(); i++){
-            if(!test(expected.charAt(i))){
+        for (int i = 0; i < expected.length(); i++) {
+            if (!test(expected.charAt(i))) {
                 ch = ch0;
                 source.setPos(pos0);
                 return false;
@@ -44,6 +48,7 @@ public abstract class BaseParser {
         }
         return true;
     }
+
     protected void expect(final char c) throws ParserException {
         if (ch != c) {
             if (c == ')') {
@@ -60,16 +65,17 @@ public abstract class BaseParser {
     }
 
 
-    protected Const parseNumber(boolean positive) throws ParserException {
+    protected Const<T> parseNumber(boolean positive) throws ParserException {
         final StringBuilder sb = new StringBuilder(positive ? "" : "-");
         copyInteger(sb);
 
         try {
-            return new Const(Integer.parseInt(sb.toString()));
+            return new Const<>(calculator.parseString(sb.toString()));
         } catch (NumberFormatException e) {
             throw error("Const integer overflow: " + sb);
         }
     }
+
     protected void skipWhitespace() {
         while (Character.isWhitespace(ch)) {
             nextChar();
@@ -83,14 +89,17 @@ public abstract class BaseParser {
     protected boolean between(final char from, final char to) {
         return from <= ch && ch <= to;
     }
-    protected boolean isCorrectSymbolAfterFunctionName(){
+
+    protected boolean isCorrectSymbolAfterFunctionName() {
         return isWhitespace(ch) || ch == '(' || ch == '-';
     }
-    protected void checkForSymbolAfterFunctionName(){
-        if(!isCorrectSymbolAfterFunctionName()){
+
+    protected void checkForSymbolAfterFunctionName() {
+        if (!isCorrectSymbolAfterFunctionName()) {
             throw error("Invalid function name");
         }
     }
+
     private void copyInteger(final StringBuilder sb) throws ParserException {
         if (test('0')) {
             sb.append('0');
@@ -101,6 +110,7 @@ public abstract class BaseParser {
             throw new MissingParenException(e.getMessage(), e.getPrefix(), e.getPos());
         }
     }
+
     private void copyDigits(final StringBuilder sb) {
         while (between('0', '9')) {
             sb.append(ch);

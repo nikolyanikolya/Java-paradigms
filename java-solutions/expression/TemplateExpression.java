@@ -1,5 +1,5 @@
 package expression;
 
-public interface TemplateExpression extends TripleExpression, Expression{
+public interface TemplateExpression<T extends Number> extends TripleExpression, Expression, GenericExpression<T> {
 
 }
